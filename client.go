@@ -1,4 +1,4 @@
-package client
+package lokishipper
 
 import (
 	"bufio"
