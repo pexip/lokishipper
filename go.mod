@@ -3,7 +3,6 @@ module github.com/pexip/lokishipper
 go 1.16
 
 require (
-	github.com/1lann/lokishipper v0.0.0-20191116185935-ea0131e10a48
 	github.com/go-kit/kit v0.10.0
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/snappy v0.0.3

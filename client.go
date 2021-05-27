@@ -15,7 +15,7 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/golang/snappy"
 
-	"github.com/1lann/lokishipper/logproto"
+	"github.com/pexip/lokishipper/logproto"
 	"github.com/prometheus/common/config"
 	"github.com/prometheus/common/model"
 )
