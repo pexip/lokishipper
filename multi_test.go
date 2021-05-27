@@ -9,13 +9,12 @@ import (
 
 	"github.com/grafana/loki/pkg/promtail/api"
 
-	"github.com/cortexproject/cortex/pkg/util"
 	"github.com/grafana/loki/pkg/promtail/client/fake"
 	"github.com/prometheus/common/model"
 )
 
 func TestNewMulti(t *testing.T) {
-	_, err := NewMulti(util.Logger, []Config{}...)
+	_, err := NewMulti(nil, []Config{}...)
 	if err == nil {
 		t.Fatal("expected err but got nil")
 	}
@@ -24,7 +23,7 @@ func TestNewMulti(t *testing.T) {
 	expectedCfg1 := Config{BatchSize: 20, URL: host1}
 	expectedCfg2 := Config{BatchSize: 10, URL: host2}
 
-	clients, err := NewMulti(util.Logger, expectedCfg1, expectedCfg2)
+	clients, err := NewMulti(nil, expectedCfg1, expectedCfg2)
 	if err != nil {
 		t.Fatalf("expected err: nil got:%v", err)
 	}

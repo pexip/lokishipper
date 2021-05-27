@@ -10,7 +10,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/cortexproject/cortex/pkg/util"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	"github.com/gogo/protobuf/proto"
@@ -69,7 +68,7 @@ func New(cfg Config, logger log.Logger) (Client, error) {
 		return nil, err
 	}
 
-	c.client, err = config.NewClientFromConfig(cfg.Client, "promtail", false)
+	c.client, err = config.NewClientFromConfig(cfg.Client, "promtail")
 	if err != nil {
 		return nil, err
 	}
@@ -133,9 +132,8 @@ func (c *client) sendBatch(batch map[model.Fingerprint]*logproto.Stream) {
 	}
 
 	ctx := context.Background()
-	backoff := util.NewBackoff(ctx, c.cfg.BackoffConfig)
 	var status int
-	for backoff.Ongoing() {
+	for {
 		status, err = c.send(ctx, buf)
 
 		if err == nil {
@@ -148,7 +146,7 @@ func (c *client) sendBatch(batch map[model.Fingerprint]*logproto.Stream) {
 		}
 
 		level.Warn(c.logger).Log("msg", "error sending batch, will retry", "status", status, "error", err)
-		backoff.Wait()
+		time.Sleep(time.Second)
 	}
 
 	if err != nil {
