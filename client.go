@@ -16,7 +16,6 @@ import (
 	"github.com/golang/snappy"
 
 	"github.com/pexip/lokishipper/logproto"
-	"github.com/prometheus/common/config"
 	"github.com/prometheus/common/model"
 )
 
@@ -63,16 +62,9 @@ func New(cfg Config, logger log.Logger) (Client, error) {
 		externalLabels: cfg.ExternalLabels,
 	}
 
-	err := cfg.Client.Validate()
-	if err != nil {
-		return nil, err
+	if c.client == nil {
+		return nil, fmt.Errorf("Http client needs to be provided in config")
 	}
-
-	c.client, err = config.NewClientFromConfig(cfg.Client, "promtail")
-	if err != nil {
-		return nil, err
-	}
-
 	c.client.Timeout = cfg.Timeout
 
 	c.wg.Add(1)
