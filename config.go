@@ -14,7 +14,7 @@ type Config struct {
 	BatchWait time.Duration
 	BatchSize int
 
-	client *http.Client
+	Client *http.Client
 
 	// The labels to add to any time series or alerts when communicating with loki
 	ExternalLabels model.LabelSet

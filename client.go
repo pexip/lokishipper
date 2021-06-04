@@ -38,7 +38,6 @@ type Client interface {
 type client struct {
 	logger  log.Logger
 	cfg     Config
-	client  *http.Client
 	quit    chan struct{}
 	entries chan entry
 	wg      sync.WaitGroup
@@ -62,10 +61,10 @@ func New(cfg Config, logger log.Logger) (Client, error) {
 		externalLabels: cfg.ExternalLabels,
 	}
 
-	if c.client == nil {
+	if c.cfg.Client == nil {
 		return nil, fmt.Errorf("Http client needs to be provided in config")
 	}
-	c.client.Timeout = cfg.Timeout
+	c.cfg.Client.Timeout = cfg.Timeout
 
 	c.wg.Add(1)
 	go c.run()
@@ -171,7 +170,7 @@ func (c *client) send(ctx context.Context, buf []byte) (int, error) {
 	req = req.WithContext(ctx)
 	req.Header.Set("Content-Type", contentType)
 
-	resp, err := c.client.Do(req)
+	resp, err := c.cfg.Client.Do(req)
 	if err != nil {
 		return -1, err
 	}
